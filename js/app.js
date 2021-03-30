@@ -1,25 +1,21 @@
 'use strict';
-let arr=[];
+
+
+let arr = [];
 function gallery(data) {
     this.image_url = data.image_url;
     this.title = data.title;
     this.description = data.description;
     this.keyword = data.keyword;
     this.horns = data.horns;
-    arr=[this.keyword];
-    if(! arr.includes(this.keyword)){
-        arr.push(galleryClone);
-    }
-    
     gallery.all.push(this);
 }
 gallery.all = [];
 
-console.log(arr);
 
 
 
-$.ajax('./gallery.json')
+$.ajax('./Data/page-1.json')
     .then(galleryData => {
         console.log(galleryData);
         galleryData.forEach(val => {
@@ -29,23 +25,20 @@ $.ajax('./gallery.json')
         });
 
         $('.photo-template').first().remove();
+        checkGallery();
 
     });
 
 
 gallery.prototype.render = function () {
     let galleryClone = $('option').first().clone();
-    galleryClone .text(this.keyword);
-    galleryClone.attr('value',this.keyword);
-    if(! arr.includes(galleryClone.text())){
-        arr.push(galleryClone.text());
-       
-      }
-
-   $('select').append(galleryClone);
+    galleryClone.text(this.keyword);
+    galleryClone.attr('value', this.keyword);
+    $('select').append(galleryClone);
 
     let div = $('<div></div>');
-    div.addClass(galleryClone);
+    div.addClass(this.keyword);
+    // div.addClass(galleryClone);
     let template = $('.photo-template').html();
     div.html(template);
 
@@ -55,17 +48,15 @@ gallery.prototype.render = function () {
 
     $('main').append(div);
 
+};
+
+function checkGallery() {
+    $('select').change(function(){
+        let select = $(this).val();
+        $('div').hide();
+        $(`.${select}`).show();
+        console.log(select);
+    });
 }
-
-$('select').on('change',function(){
-    let selectValue = $(this).val();
-    if(selectValue !== 'default'){
-      $('.photo-template').removeClass('show');
-      $('.'+selectValue).addClass('show');
-    }else{
-      $('.photo-template').addClass('show');
-    }
-  });
-
 
 
