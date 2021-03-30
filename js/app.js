@@ -2,47 +2,37 @@
 
 
 let arr = [];
-function gallery(data) {
+function Gallery(data) {
     this.image_url = data.image_url;
     this.title = data.title;
     this.description = data.description;
     this.keyword = data.keyword;
     this.horns = data.horns;
-    if (! arr.includes(this.keyword)) {
+    if (!arr.includes(this.keyword)) {
         arr.push(this.keyword);
     }
-    gallery.all.push(this);
+    Gallery.all.push(this);
 }
-gallery.all = [];
-
-
-
+Gallery.all = [];
 
 $.ajax('./Data/page-1.json')
-    .then(galleryData => {
-        console.log(galleryData);
-        galleryData.forEach(val => {
-            console.log(val);
-            let newGallery = new gallery(val);
+    .then(GalleryData => {
+        GalleryData.forEach(val => {
+            let newGallery = new Gallery(val);
             newGallery.render();
         });
-
-        $('.photo-template').first().remove();
         forSelection();
         checkGallery();
 
     });
 
 
-gallery.prototype.render = function () {
-    // let galleryClone = $('option').first().clone();
-    // galleryClone.text(this.keyword);
-    // galleryClone.attr('value', this.keyword);
-    // $('select').append(galleryClone);
 
+
+Gallery.prototype.render = function () {
     let div = $('<div></div>');
     div.addClass(this.keyword);
-    // div.addClass(galleryClone);
+    // div.addClass(GalleryClone);
     let template = $('.photo-template').html();
     div.html(template);
 
@@ -59,7 +49,6 @@ function checkGallery() {
         let select = $(this).val();
         $('div').hide();
         $(`.${select}`).show();
-        console.log(select);
     });
 }
 
@@ -67,10 +56,53 @@ function checkGallery() {
 
 function forSelection() {
     for (let index = 0; index < arr.length; index++) {
-        let galleryClone = $('option').first().clone().text(arr[index]);
-        galleryClone.attr('value', arr[index]);
-        $('select').append(galleryClone);
+        let GalleryClone = $('option').first().clone().text(arr[index]);
+        GalleryClone.attr('value', arr[index]);
+        $('select').append(GalleryClone);
     }
 }
+
+$('#page1').on('click', function () {
+    $('main').empty();
+    $.ajax('./Data/page-1.json')
+        .then(GalleryData => {
+            GalleryData.forEach(val => {
+                let newGallery = new Gallery(val);
+                newGallery.render();
+            });
+            forSelection();
+            checkGallery();
+
+        });
+});
+
+$('#page2').on('click', function () {
+    $('main').empty();
+    $.ajax('./Data/page-2.json')
+        .then(GalleryData => {
+            GalleryData.forEach(val => {
+                let newGallery = new Gallery(val);
+                newGallery.renderMustash();
+            });
+            forSelection();
+            checkGallery();
+
+        });
+});
+
+
+Gallery.prototype.renderMustash = function () {
+    let mustach = $('#galleryTemplate').html();
+    let renderMustach = Mustache.render(mustach, this);
+    console.log(this);
+    let section = $('section');
+    section.addClass(this.keyword);
+    $('main').append(renderMustach);
+
+    let keyList = $('option').first().clone().text(this.keyword);
+    $('select').append(keyList);
+
+
+};
 
 
