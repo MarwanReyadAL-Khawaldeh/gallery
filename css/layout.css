@@ -1,0 +1,29 @@
+
+img{
+    width: 200px;
+    height: 200px;
+    margin: 20px;
+}
+
+
+header{
+    text-align: center;
+}
+
+header select{
+    font-size: 15px;
+    margin: 20px;
+    text-align: center;
+}
+footer{
+    text-align: center;
+}
+main{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr  ;
+    gap: 20px;
+    justify-content: space-between;
+    
+    
+}
+
