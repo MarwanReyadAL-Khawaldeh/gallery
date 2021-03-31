@@ -27,7 +27,7 @@ $.ajax('./Data/page-1.json')
 function checkGallery() {
     $('select').change(function () {
         let select = $(this).val();
-        $('.keyword').hide();
+        $('div').hide();
         $(`.${select}`).show();
         console.log(select);
     });
