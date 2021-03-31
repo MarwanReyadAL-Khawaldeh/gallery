@@ -82,4 +82,61 @@ Gallery.prototype.renderMustash = function () {
     $('main').append(renderMustach);
 };
 
+function sortHorns() {
+    Gallery.all.sort(function(a,b){
+        if (a.horns < b.horns) {
+            return 1;
+        } else if (a.horns > b.horns) {
+            return -1;
+        } else {
+            return 0;
+        }
+    });
+}
+
+function sortTitle() {
+    Gallery.all.sort(function(a,b){
+        if (a.keyword.toUpperCase() < b.keyword.toUpperCase()) {
+            return 1;
+        } else if (a.keyword.toUpperCase() > b.keyword.toUpperCase()) {
+            return -1;
+        } else {
+            return 0;
+        }
+    });
+}
+
+$('#Sort-Title').on('click', function () {
+    $('main').empty();
+    arr = [];
+    $.ajax('./Data/page-1.json')
+        .then(GalleryData => {
+            GalleryData.forEach(val => {
+                let newGallery = new Gallery(val);
+                newGallery.sortHorns();
+                console.log(newGallery);
+                newGallery.renderMustash();
+            });
+            forSelection();
+            checkGallery();
+        });
+});
+
+$('#Sort-by-NumHorns').on('click', function () {
+    $('main').empty();
+    arr = [];
+    $.ajax('./Data/page-1.json')
+        .then(GalleryData => {
+            GalleryData.forEach(val => {
+                let newGallery = new Gallery(val);
+                newGallery.sortTitle();
+                newGallery.renderMustash();
+                console.log(newGallery);
+            });
+            forSelection();
+            checkGallery();
+        });
+});
+
+
 
