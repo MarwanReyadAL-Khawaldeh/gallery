@@ -82,61 +82,68 @@ Gallery.prototype.renderMustash = function () {
     $('main').append(renderMustach);
 };
 
-function sortHorns() {
-    Gallery.all.sort(function(a,b){
-        if (a.horns < b.horns) {
-            return 1;
-        } else if (a.horns > b.horns) {
-            return -1;
-        } else {
-            return 0;
-        }
+
+$('#title').click(handleSubmitKeyword);
+
+function handleSubmitKeyword() {
+    arr.sort(function (a, b) {
+        return a.keyword.localeCompare(b.keyword);
     });
+
+    $('#MustacheTemplate').fadeOut(300);
+    const mainPage = document.querySelector('main');
+    for (let i = 0; i < arr.length; i++) {
+        const parentElement = document.createElement('#MustacheTemplate');
+        mainPage.appendChild(parentElement);
+
+        const keywords = document.createElement('h2');
+        parentElement.appendChild(keywords);
+        keywords.textContent = `${arr[i].keyword}`;
+
+        const img = document.createElement('img');
+        parentElement.appendChild(img);
+        img.setAttribute('src', `${arr[i].image_url}`);
+
+        const titles = document.createElement('h3');
+        parentElement.appendChild(titles);
+        titles.textContent = `${arr[i].title}`;
+
+        const numHorns = document.createElement('h4');
+        parentElement.appendChild(numHorns);
+        numHorns.textContent = `Number Of Horns: ${arr[i].horns}`;
+    }
 }
 
-function sortTitle() {
-    Gallery.all.sort(function(a,b){
-        if (a.keyword.toUpperCase() < b.keyword.toUpperCase()) {
-            return 1;
-        } else if (a.keyword.toUpperCase() > b.keyword.toUpperCase()) {
-            return -1;
-        } else {
-            return 0;
-        }
+
+
+$('#horns').click(handleSubmitHorns);
+
+function handleSubmitHorns() {
+    arr.sort(function (a, b) {
+        return a.horns - b.horns;
     });
+
+    $('#MustacheTemplate').fadeOut(300);
+    const mainPage = document.querySelector('main');
+    for (let i = 0; i < arr.length; i++) {
+        const parentElement = document.createElement('#MustacheTemplate');
+        mainPage.appendChild(parentElement);
+
+        const hornsNum = document.createElement('h2');
+        parentElement.appendChild(hornsNum);
+        hornsNum.textContent = `Number Of Horns: ${arr[i].horns}`;
+
+        const img = document.createElement('img');
+        parentElement.appendChild(img);
+        img.setAttribute('src', `${arr[i].image_url}`);
+
+        const titles = document.createElement('h3');
+        parentElement.appendChild(titles);
+        titles.textContent = `${arr[i].title}`;
+
+        const keywords = document.createElement('h4');
+        parentElement.appendChild(keywords);
+        keywords.textContent = `Number Of Horns: ${arr[i].keyword}`;
+    }
 }
-
-$('#Sort-Title').on('click', function () {
-    $('main').empty();
-    arr = [];
-    $.ajax('./Data/page-1.json')
-        .then(GalleryData => {
-            GalleryData.forEach(val => {
-                let newGallery = new Gallery(val);
-                newGallery.sortHorns();
-                console.log(newGallery);
-                newGallery.renderMustash();
-            });
-            forSelection();
-            checkGallery();
-        });
-});
-
-$('#Sort-by-NumHorns').on('click', function () {
-    $('main').empty();
-    arr = [];
-    $.ajax('./Data/page-1.json')
-        .then(GalleryData => {
-            GalleryData.forEach(val => {
-                let newGallery = new Gallery(val);
-                newGallery.sortTitle();
-                newGallery.renderMustash();
-                console.log(newGallery);
-            });
-            forSelection();
-            checkGallery();
-        });
-});
-
-
 
